@@ -74,6 +74,14 @@ export default new Router({
             title: 'Table',
             icon: 'table'
           }
+        },
+        {
+          path: 'line-chart',
+          component: () => import(/* webpackChunkName: "line-chart" */ '@/views/charts/line-chart.vue'),
+          meta: {
+            title: 'LineChart',
+            icon: 'chart'
+          }
         }
       ]
     },
