@@ -6,10 +6,7 @@
       :center="center"
       style="height: 500px; width: 100%"
     >
-      <l-tile-layer
-        :url="url"
-        
-      />
+      <l-tile-layer :url="url"/>
       <!-- <l-control class="example-custom-control">
         <p @click="showAlert">
           Click me
@@ -21,6 +18,9 @@
       >
         Vue2Leaflet Watermark Control
       </l-control> -->
+      <l-marker :lat-lng="marker">
+        <l-popup content="TEST"></l-popup>
+      </l-marker>  
     </l-map>
   </div>
     <el-table
@@ -40,7 +40,7 @@
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column 
+      <el-table-column
         label="Name"
         width="180"
         align="center"
@@ -96,21 +96,25 @@
             {{ scope.row.status }}
           </el-tag>
         </template>
-      </el-table-column>     
+      </el-table-column>
     </el-table>
   </div>
-  
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { getDevices } from '@/api/devices'
 import L from 'leaflet'
-import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
-import 'leaflet/dist/leaflet.css';
+import { LMap, LTileLayer, LMarker, LIcon, LPopup } from 'vue2-leaflet'
+import 'leaflet/dist/leaflet.css'
 import { IDeviceData } from '@/api/types'
 
-L.Icon.Default.imagePath = '.'
+// L.Icon.Default.imagePath = '.'
+type D = L.Icon.Default & {
+  _getIconUrl?: string;
+};
+
+delete (L.Icon.Default.prototype as D)._getIconUrl;
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -123,7 +127,8 @@ L.Icon.Default.mergeOptions({
   components: {
     LMap,
     LTileLayer,
-    LMarker
+    LMarker,
+    LPopup
   },
   filters: {
     statusFilter: (status: string) => {
@@ -150,9 +155,10 @@ export default class extends Vue {
  
   data() {
     return ({
-            zoom: 13,
-            center: L.latLng(47.41322,36),
-             url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+       zoom: 13,
+       center: L.latLng(47.41322,36),
+       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+       marker: L.latLng(47.41322, 36)
     }
 )
 
