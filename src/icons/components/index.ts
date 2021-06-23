@@ -1,4 +1,5 @@
 /* tslint:disable */
+import './chart'
 import './dashboard'
 import './example'
 import './eye-off'
